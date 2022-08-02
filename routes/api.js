@@ -3,15 +3,12 @@ const router = express.Router();
 
 const authRoute = require('./api/authentication');
 
-const index = (req, res) => {
-    res.status(301).json({
-        status: 301,
+router.get('/', (req, res) => {
+    res.status(404).json({
+        status: 404,
         message: 'You are not suppose to be here.'
     });
-}
-
-router.get('/', index);
-
+});
 
 // Declare your routes below.
 router.use('/auth', authRoute);
