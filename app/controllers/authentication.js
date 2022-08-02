@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 
-const { user } = require('./../models/index');
+const { user } = require('./../../models/index');
 
 exports.login = async (req, res, next) => {
 
@@ -26,15 +26,20 @@ exports.register = async (req, res, next) => {
     }
     // End validation error
     const { name, email, password } = req.body;
-    user.findOrCreate({
+    const [model, created ] = await user.findOrCreate({
         where: {
             email: email,
-            name: name,
-            password: password
         },
-    }).then((result) => {
-        return res.send(result);
-    }).catch((err) => {
-        return res.send(JSON.stringify(err));
-    })
+        defaults: {
+            password: password,
+            name: name,
+            email: email,
+        }
+    });
+
+    if (created) {
+        // User created
+    } else {
+        // User exists
+    }
 }
