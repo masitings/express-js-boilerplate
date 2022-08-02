@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const authRoute = require('./authentication');
+const authRoute = require('./api/authentication');
 
 const index = (req, res) => {
     res.status(301).json({

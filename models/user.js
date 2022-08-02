@@ -36,8 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     }
     else if (!user.changed('password')) return user.password;
     else {
+      if (user.password != null) {
         let salt = bcrypt.genSaltSync(10);
         return user.password = bcrypt.hashSync(user.password, salt);
+      }
     }
   }
 
