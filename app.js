@@ -12,6 +12,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.disable('x-powered-by');
 
+app.get('/', (req,res) => {
+    res.status(404).json({
+        status: 200,
+        message: 'Hello there my dear.'
+    });
+})
+
 // Calling apiRoutes
 app.use('/api', apiRoutes);
 
