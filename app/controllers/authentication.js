@@ -1,9 +1,9 @@
-const { validationResult } = require('express-validator');
+const {PrismaClient} = require('@prisma/client');
 
-const { user } = require('./../../models/index');
+const { validationResult } = require('express-validator');
+const prisma = new PrismaClient();
 
 exports.login = async (req, res, next) => {
-
     // Validation error
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -11,12 +11,23 @@ exports.login = async (req, res, next) => {
             errors: errors.array()
         });
     }
-    // End validation error
-    const { email, password } = req.body;
-    res.send(email + ' - ' + password);
+
+    try {
+        const { wallet_address } = req.body;
+        const login = await prisma.user.findUnique({
+            where: {
+                address: wallet_address
+            }
+        })
+        res.send(login);
+    } catch (err) {
+        res.json(err);
+    }
+    
 }
 
 exports.register = async (req, res, next) => {
+
     // Validation error
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -25,21 +36,21 @@ exports.register = async (req, res, next) => {
         });
     }
     // End validation error
-    const { name, email, password } = req.body;
-    const [model, created ] = await user.findOrCreate({
-        where: {
-            email: email,
-        },
-        defaults: {
-            password: password,
-            name: name,
-            email: email,
-        }
-    });
 
-    if (created) {
-        // User created
-    } else {
-        // User exists
+    try {
+
+        const { wallet_address } = req.body;
+        const user = await prisma.user.create({
+            data: {
+                address: wallet_address
+            }
+        });
+        
+        res.send(user);
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: 'That wallet address has been registered before'
+        });
     }
 }
