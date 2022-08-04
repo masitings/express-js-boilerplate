@@ -14,5 +14,4 @@ router.get('/', (req, res) => {
 router.use('/auth', authRoute);
 
 
-
 module.exports = router;
