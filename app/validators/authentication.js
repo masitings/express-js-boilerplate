@@ -11,3 +11,9 @@ exports.validateRegister = () => {
         body('wallet_address').isString(),
     ]
 }
+
+exports.refreshToken = () => {
+    return [
+        body('token').isString()
+    ]
+}

@@ -15,5 +15,6 @@ router.all('/', async (req, res) => {
 
 router.post('/login', authValidator.validateLogin(), authController.login);
 router.post('/register', authValidator.validateRegister(), authController.register);
+router.post('/refresh-token', authValidator.refreshToken(), authController.refreshToken);
 
 module.exports = router;

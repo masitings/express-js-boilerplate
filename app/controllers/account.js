@@ -1,8 +1,5 @@
-require('dotenv').config();
+const { PrismaClient } = require('@prisma/client');
 
-const { PrismaClient } = requires('@prisma/client');
-const jwt = require('jsonwebtoken');
-
-exports.account = asyncy (req, res, next) => {
-    
+exports.account = async (req, res, next) => {
+    res.send(req.body.user);
 }

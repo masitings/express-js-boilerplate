@@ -1,10 +1,8 @@
-require('dotenv').config();
-
 const {PrismaClient} = require('@prisma/client');
-const jwt = require('jsonwebtoken');
 
 const { validationResult } = require('express-validator');
 const prisma = new PrismaClient();
+const jwtAuth = require('../utils/jwt');
 
 exports.login = async (req, res, next) => {
     // Validation error
@@ -18,12 +16,20 @@ exports.login = async (req, res, next) => {
 
     try {
         const { wallet_address } = req.body;
-        const login = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 address: wallet_address
             }
         });
-        res.send(login);
+        
+        if (user) {
+            const userJson = { wallet_address: user.address };
+            const token = jwtAuth.signIn(userJson);
+            res.status(200).json({
+                success: true,
+                token: token,
+            });
+        }
     } catch (err) {
         res.json(err);
     }
@@ -52,12 +58,11 @@ exports.register = async (req, res, next) => {
             }
         });
         if (user) {
-            const token = jwt.sign({
-                address: user.address
-            }, process.env.SECRET_TOKEN, { expiresIn: '2h' });
+            const userJson = { wallet_address: user.address };
+            const token = signIn(userJson);
             res.status(200).json({
                 success: true,
-                token: `Bearer ${token}`,
+                token: `${token}`,
                 user: {
                     address: user.address,
                     username: user.username,
@@ -73,4 +78,18 @@ exports.register = async (req, res, next) => {
             message: 'That wallet address has been registered before'
         });
     }
+}
+
+exports.refreshToken = async (req, res, next) => {
+    // Validation error
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            errors: errors.array()
+        });
+    }
+    // End validation error
+
+    const { token } = req.body;
+    if (token == null) return res.sendStatus(401);
 }

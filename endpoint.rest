@@ -1,0 +1,21 @@
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+
+{
+    "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dD8CDcf0"
+}
+
+###
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+
+{
+    "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dD8CDcf0"
+}
+
+###
+GET http://localhost:3000/api/account
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTY3MzM5NSwiZXhwIjoxNjU5NjgwNTk1fQ.PNtHXI5n4sejPftNINrTYj7Jqe8R4j84gRTLJN61zEI
+
