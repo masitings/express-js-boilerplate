@@ -6,7 +6,8 @@ Content-Type: application/json
     "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dD8CDcf0"
 }
 
-###
+
+### Register Account
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
@@ -15,7 +16,21 @@ Content-Type: application/json
     "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dD8CDcf0"
 }
 
-###
-GET http://localhost:3000/api/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTY3ODA2OSwiZXhwIjoxNjU5Njg1MjY5fQ.I85q4k5KLtSFPRiFYXqVtNunrzGM5CwjPYplICxtxBQ
 
+
+### Get Detail Account
+GET http://localhost:3000/api/account
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTY5MjQ1NCwiZXhwIjoxNjU5Njk5NjU0fQ.bvXK5t414TqZTDLYy1gsN-Zr1AAWkAuBCHmXV7R6RWs
+
+
+### Update Account
+PUT http://localhost:3000/api/account/update
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTY4OTgzMywiZXhwIjoxNjU5Njk3MDMzfQ.cPn_a_TBshwwTue-2yujo47gD71nHwBmpr2L3L5E35s
+
+
+{
+    "username": "masiting",
+    "email": "masitingss@gmail.com"
+}

@@ -1,31 +1,34 @@
 const jwt = require('jsonwebtoken');
+const { body, header } = require('express-validator');
+const response = require('./../utils/response');
 
-module.exports = {
-    signIn: function (user) {
-        return jwt.sign(user, process.env.SECRET_TOKEN, {expiresIn: '2h'});
-    },
-    authenticateToken: function (req, res, next) {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
-        if (token == null) return res.sendStatus(401);
-
+exports.checkAuth = () => {
+    return header('authorization').custom(async (value, {req}) => {
+        const token = value && value.split(' ')[1];
         jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
-            console.log(err);
-            if (err) return res.sendStatus(403);
+            if (err) {
+                throw new Error('Invalid token');
+            }
             req.body.wallet_address = user.wallet_address;
-            next();
+            return true;
         });
-    },
-    isLoggedin: function (token) {
-        jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
-            if (err) return {
-                success: false,
-                data: err
-            };
-            return {
-                success: true,
-                data: user
-            };
-        });
-    }
+    });
+}
+
+exports.signIn = (user) => {
+    return jwt.sign(user, process.env.SECRET_TOKEN, {expiresIn: '2h'});
+}
+
+exports.authenticateToken = () => {
+    return [
+       this.checkAuth() 
+    ]
+}
+
+exports.updateAccount = () => {
+    return [
+        this.checkAuth(),
+        body('username').isString().withMessage('Username is required'),
+        body('email').isEmail().withMessage('Email address is required')
+    ]
 }
