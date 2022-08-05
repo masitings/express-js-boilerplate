@@ -1,8 +1,8 @@
 const {PrismaClient} = require('@prisma/client');
 
 const { validationResult } = require('express-validator');
-const jwtAuth = require('../utils/jwt');
-const response = require('./../utils/response');
+const accountValidator = require('./../validators/account');
+const prisma = new PrismaClient();
 
 const prisma = new PrismaClient();
 
@@ -26,9 +26,10 @@ exports.login = async (req, res, next) => {
         });
         if (user) {
             const userJson = { wallet_address: user.address };
-            const token = jwtAuth.signIn(userJson);
-            response.resJson(res, 200, true, 'Logged in', {
-                token: token
+            const token = accountValidator.signIn(userJson);
+            res.status(200).json({
+                success: true,
+                token: token,
             });
         } else {
             response.resJson(res, 401, false, 'User with that wallet does not exists');
