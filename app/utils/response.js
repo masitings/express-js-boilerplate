@@ -1,6 +1,6 @@
-exports.response = async (res, status, msg, values) => {
+exports.resJson = async (res, status, isSuccess, msg, values) => {
     var response = {
-        success: true,
+        success: isSuccess,
         message: msg,
         data: values
     };
