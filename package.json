@@ -1,13 +1,12 @@
 {
-  "name": "Express API Boilerplate",
+  "name": "Express",
   "version": "1.0.0",
   "description": "Express.JS API Boilerplate using Sequelize for ORM",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
-    "migrate:up": "npx sequelize-cli db:migrate",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo"
+    "migrate": "npx prisma migrate dev"
   },
   "repository": {
     "type": "git",
@@ -20,6 +19,7 @@
   },
   "homepage": "https://github.com/masitings/express-js-boilerplate#readme",
   "dependencies": {
+    "@prisma/client": "^4.1.1",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.22.2",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "prisma": "^4.1.1"
   }
 }
