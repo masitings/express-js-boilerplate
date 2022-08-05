@@ -1,15 +1,13 @@
-const { PrismaClient } = require('@prisma/client');
-const response = require('./../utils/response');
-const { validationResult } = require('express-validator');
+const { PrismaClient, Prisma } = require('@prisma/client');
+const response = require('./../utils/response')
+const { validation_handler } = require('./../validators/index');
 
 const prisma = new PrismaClient();
 
+
 exports.account = async (req, res, next) => {
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        response.resJson(res, 400, false, 'Validation error', {errors: errors.array()});
-    }
+    validation_handler(req, res);
     // End validation error
 
     const { wallet_address } = req.body;
@@ -30,22 +28,29 @@ exports.account = async (req, res, next) => {
 
 exports.updateAccount = async (req, res, next) => {
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        response.resJson(res, 400, false, 'Validation error', {errors: errors.array()});
-    }
+    validation_handler(req, res);
     // End validation error
-    const { wallet_address, username, email } = req.body;
-    const user = await prisma.user.update({
-        where: {
-            address: wallet_address
-        },
-        data: {
-            username: username,
-            email: email
+    try {
+        const { wallet_address, username, email } = req.body;
+        const user = await prisma.user.update({
+            where: {
+                address: wallet_address
+            },
+            data: {
+                username: username,
+                email: email
+            }
+        });
+        if (user) {
+            response.resJson(res, 200, true, 'Account has been updated successfully.');
         }
-    });
-    if (user) {
-        response.resJson(res, 200, true, 'Account has been updated successfully.');
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            // The .code property can be accessed in a type-safe manner
+            if (e.code === 'P2002') {
+              response.resJson(res, 400, false, 'The email address or username has been taken.');
+            }
+        }
     }
+
 }

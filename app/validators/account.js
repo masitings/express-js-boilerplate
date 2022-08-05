@@ -15,17 +15,7 @@ exports.checkAuth = () => {
     });
 }
 
-exports.signIn = (user) => {
-    return jwt.sign(user, process.env.SECRET_TOKEN, {expiresIn: '2h'});
-}
-
-exports.authenticateToken = () => {
-    return [
-       this.checkAuth() 
-    ]
-}
-
-exports.updateAccount = () => {
+exports.update = () => {
     return [
         this.checkAuth(),
         body('username').isString().withMessage('Username is required'),

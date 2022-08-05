@@ -1,6 +1,6 @@
+### Login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
-
 
 {
     "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dD8CDcf0"
@@ -11,24 +11,26 @@ Content-Type: application/json
 POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
-
 {
-    "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dD8CDcf0"
+    "wallet_address": "0x4f14d3d1D3D95cd54Aa2812cAC3ce729dDs8ssaasssCDcf0a"
 }
 
+### Refresh Token
+POST http://localhost:3000/api/auth/refresh-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTcwMDcwNiwiZXhwIjoxNjU5NzA3OTA2fQ.TNkb2hJWBYcC_BiK4SVKqbMxX3buyFx61CaDNaVQgVg
 
 
 ### Get Detail Account
 GET http://localhost:3000/api/account
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTY5MjQ1NCwiZXhwIjoxNjU5Njk5NjU0fQ.bvXK5t414TqZTDLYy1gsN-Zr1AAWkAuBCHmXV7R6RWs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTcwMDcwNiwiZXhwIjoxNjU5NzA3OTA2fQ.TNkb2hJWBYcC_BiK4SVKqbMxX3buyFx61CaDNaVQgVg
 
 
 ### Update Account
 PUT http://localhost:3000/api/account/update
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTY4OTgzMywiZXhwIjoxNjU5Njk3MDMzfQ.cPn_a_TBshwwTue-2yujo47gD71nHwBmpr2L3L5E35s
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRfYWRkcmVzcyI6IjB4NGYxNGQzZDFEM0Q5NWNkNTRBYTI4MTJjQUMzY2U3MjlkRDhDRGNmMCIsImlhdCI6MTY1OTcwMDcwNiwiZXhwIjoxNjU5NzA3OTA2fQ.TNkb2hJWBYcC_BiK4SVKqbMxX3buyFx61CaDNaVQgVg
 
 {
     "username": "masiting",

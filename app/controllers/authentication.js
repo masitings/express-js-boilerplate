@@ -1,19 +1,14 @@
 const {PrismaClient} = require('@prisma/client');
 const response = require('./../utils/response');
-const { validationResult } = require('express-validator');
-const accountValidator = require('./../validators/account');
+const { validation_handler } = require('./../validators/index');
+const auth = require('./../utils/jwt');
 
 const prisma = new PrismaClient();
 
 
 exports.login = async (req, res, next) => {
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            errors: errors.array()
-        });
-    }
+    validation_handler(req, res);
     // End validation error
 
     try {
@@ -25,7 +20,7 @@ exports.login = async (req, res, next) => {
         });
         if (user) {
             const userJson = { wallet_address: user.address };
-            const token = accountValidator.signIn(userJson);
+            const token = await auth.signIn(userJson);
             res.status(200).json({
                 success: true,
                 token: token,
@@ -42,12 +37,7 @@ exports.login = async (req, res, next) => {
 exports.register = async (req, res, next) => {
 
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            errors: errors.array()
-        });
-    }
+    validation_handler(req, res);
     // End validation error
 
     try {
@@ -62,26 +52,31 @@ exports.register = async (req, res, next) => {
         });
         if (user) {
             const userJson = { wallet_address: user.address };
-            const token = jwtAuth.signIn(userJson);
+            const token = await auth.signIn(userJson);
             response.resJson(res, 200, true, 'Registration success', {
                 token: token,
             });
         }
     } catch (err) {
-        response.resJson(res, 400, false, 'The wallet has been registered before');
+        response.resJson(res, 400, false, 'That wallet has been registered before');
     }
 }
 
 exports.refreshToken = async (req, res, next) => {
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            errors: errors.array()
+    validation_handler(req, res);
+    // End validation error
+    const { wallet_address } = req.body;
+    const user = await prisma.user.findUnique({
+        where: {
+            address: wallet_address
+        }
+    });
+    if (user) {
+        const userJson = { wallet_address: user.address };
+        const token = await auth.signIn(userJson);
+        response.resJson(res, 200, true, 'Token refreshed', {
+            token: token
         });
     }
-    // End validation error
-
-    const { token } = req.body;
-    if (token == null) return res.sendStatus(401);
 }
