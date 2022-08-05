@@ -1,8 +1,11 @@
 const {PrismaClient} = require('@prisma/client');
 
 const { validationResult } = require('express-validator');
-const prisma = new PrismaClient();
 const jwtAuth = require('../utils/jwt');
+const response = require('./../utils/response');
+
+const prisma = new PrismaClient();
+
 
 exports.login = async (req, res, next) => {
     // Validation error
@@ -21,17 +24,17 @@ exports.login = async (req, res, next) => {
                 address: wallet_address
             }
         });
-        
         if (user) {
             const userJson = { wallet_address: user.address };
             const token = jwtAuth.signIn(userJson);
-            res.status(200).json({
-                success: true,
-                token: token,
+            response.resJson(res, 200, true, 'Logged in', {
+                token: token
             });
+        } else {
+            response.resJson(res, 401, false, 'User with that wallet does not exists');
         }
     } catch (err) {
-        res.json(err);
+        response.resJson(res, 500, false, err);
     }
     
 }
@@ -59,24 +62,13 @@ exports.register = async (req, res, next) => {
         });
         if (user) {
             const userJson = { wallet_address: user.address };
-            const token = signIn(userJson);
-            res.status(200).json({
-                success: true,
-                token: `${token}`,
-                user: {
-                    address: user.address,
-                    username: user.username,
-                    email: user.email 
-                },
-                msg: "You are now logged in."
+            const token = jwtAuth.signIn(userJson);
+            response.resJson(res, 200, true, 'Registration success', {
+                token: token,
             });
         }
     } catch (err) {
-        console.log(err);
-        res.status(400).json({
-            success: false,
-            message: 'That wallet address has been registered before'
-        });
+        response.resJson(res, 400, false, 'The wallet has been registered before');
     }
 }
 

@@ -4,7 +4,7 @@ CREATE TABLE `User` (
     `username` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
     `address` VARCHAR(191) NOT NULL,
-    `nonce` VARCHAR(191) NOT NULL,
+    `nonce` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 

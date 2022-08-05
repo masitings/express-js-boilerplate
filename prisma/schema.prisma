@@ -15,7 +15,7 @@ model User {
   username String? @unique
   email String? @unique
   address String @unique
-  nonce Int @unique
+  nonce Int? @unique
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }

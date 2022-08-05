@@ -22,4 +22,5 @@ app.get('/', (req,res) => {
 // Calling apiRoutes
 app.use('/api', apiRoutes);
 
-app.listen(process.env.APP_PORT, () => console.log (process.env.APP_NAME + ' start at port ' + process.env.APP_PORT + '(http://localhost:'+process.env.APP_PORT+')'));
+// Listening to any ports
+app.listen(process.env.APP_PORT, () => console.log (process.env.APP_NAME + ' start at port ' + process.env.APP_PORT + ' ( http://localhost:'+process.env.APP_PORT+' )'));
