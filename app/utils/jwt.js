@@ -13,8 +13,7 @@ module.exports = {
         jwt.verify(token, process.env.SECRET_TOKEN, (err, user) => {
             console.log(err);
             if (err) return res.sendStatus(403);
-            req.body.user = user;
-            console.log(req.user);
+            req.body.wallet_address = user.wallet_address;
             next();
         });
     }
