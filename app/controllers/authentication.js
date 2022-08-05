@@ -1,27 +1,35 @@
 const {PrismaClient} = require('@prisma/client');
+const response = require('./../utils/response');
+const { validation_handler } = require('./../validators/index');
+const auth = require('./../utils/jwt');
 
-const { validationResult } = require('express-validator');
 const prisma = new PrismaClient();
+
 
 exports.login = async (req, res, next) => {
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            errors: errors.array()
-        });
-    }
+    validation_handler(req, res);
+    // End validation error
 
     try {
         const { wallet_address } = req.body;
-        const login = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 address: wallet_address
             }
-        })
-        res.send(login);
+        });
+        if (user) {
+            const userJson = { wallet_address: user.address };
+            const token = await auth.signIn(userJson);
+            res.status(200).json({
+                success: true,
+                token: token,
+            });
+        } else {
+            response.resJson(res, 401, false, 'User with that wallet does not exists');
+        }
     } catch (err) {
-        res.json(err);
+        response.resJson(res, 500, false, err);
     }
     
 }
@@ -29,28 +37,46 @@ exports.login = async (req, res, next) => {
 exports.register = async (req, res, next) => {
 
     // Validation error
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            errors: errors.array()
-        });
-    }
+    validation_handler(req, res);
     // End validation error
 
     try {
-
         const { wallet_address } = req.body;
+        const nonce = Math.floor(Math.random() * 1000000);
+
         const user = await prisma.user.create({
             data: {
-                address: wallet_address
+                address: wallet_address,
+                nonce: nonce
             }
         });
-        
-        res.send(user);
+        if (user) {
+            const userJson = { wallet_address: user.address };
+            const token = await auth.signIn(userJson);
+            response.resJson(res, 200, true, 'Registration success', {
+                token: token,
+            });
+        }
     } catch (err) {
-        res.status(400).json({
-            success: false,
-            message: 'That wallet address has been registered before'
+        response.resJson(res, 400, false, 'That wallet has been registered before');
+    }
+}
+
+exports.refreshToken = async (req, res, next) => {
+    // Validation error
+    validation_handler(req, res);
+    // End validation error
+    const { wallet_address } = req.body;
+    const user = await prisma.user.findUnique({
+        where: {
+            address: wallet_address
+        }
+    });
+    if (user) {
+        const userJson = { wallet_address: user.address };
+        const token = await auth.signIn(userJson);
+        response.resJson(res, 200, true, 'Token refreshed', {
+            token: token
         });
     }
 }

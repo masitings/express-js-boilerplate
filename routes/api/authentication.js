@@ -3,7 +3,8 @@ const router = express.Router();
 
 // Validator and Controller
 const authController = require('../../app/controllers/authentication');
-const authValidator = require('../../app/validators/authentication');
+const { authentication, account } = require('./../../app/validators/index');
+
 
 //Declare route here
 router.all('/', async (req, res) => {
@@ -13,7 +14,8 @@ router.all('/', async (req, res) => {
     });
 });
 
-router.post('/login', authValidator.validateLogin(), authController.login);
-router.post('/register', authValidator.validateRegister(), authController.register);
+router.post('/login', authentication.validateLogin(), authController.login);
+router.post('/register', authentication.validateRegister(), authController.register);
+router.post('/refresh-token', account.checkAuth(), authController.refreshToken);
 
 module.exports = router;
